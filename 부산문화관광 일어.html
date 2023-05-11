@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<link rel="stylesheet" href="부산문화관광.css">
+
+<body>
+    <div id="aj_body">
+        <h1 style="text-align: center; margin-top: 100px; background-color: #eff8ff;">釜山の観光文化</h1>
+        <div id="radio-container">
+            <input type="radio" name="filter" value="all" checked> 全体
+            <input type="radio" name="filter" value="free"> 無料
+            <input type="radio" name="filter" value="paid"> 有料
+            
+            <div id="search-container">
+                <input id="search" type="text" value="">
+                <button id="button1" onclick="getdata()">検索</button>
+            </div>
+        </div>
+        <div id="results"></div>
+    </div>
+
+    <!--Waves Container-->
+    <div>
+        <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+            viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+            <defs>
+                <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+            </defs>
+            <g class="parallax">
+                <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" />
+                <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
+                <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
+                <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
+            </g>
+        </svg>
+    </div>
+    <!--Waves end-->
+
+
+    <script>
+        // 검색어 입력 후 엔터키를 눌렀을 때 검색 실행
+        document.getElementById("search").addEventListener("keydown", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                getdata();
+            }
+        });
+
+        function getdata() {
+            fetch('https://apis.data.go.kr/6260000/AttractionService/getAttractionJa?serviceKey=JDMqdp%2BpoONBbwPcgyUBqPvPWNQTSn1hBb3UMXx4Cb30rkGJNk9LklKeX2ftPpp0dmXX%2FSJHaEzUBIXrtJl%2BLg%3D%3D&pageNo=1&numOfRows=123&resultType=json')
+                .then((response) => response.json())
+                .then((data) => {
+                    var search = document.getElementById("search").value;
+                    var results = [];
+
+                    var filter = document.querySelector('input[name="filter"]:checked').value; //라디오 버튼 필터링 설정
+
+                    for (let i = 0; i < data['getAttractionJa']['item'].length; i++) {
+                        var str = "文化施設名: " + data['getAttractionJa']['item'][i]['MAIN_TITLE'] + "/ " + data['getAttractionJa']['item'][i]['TITLE'] + "<br>" +
+                            "住所: " + data['getAttractionJa']['item'][i]['ADDR1'] + "<br>" + "電話番号: " + data['getAttractionJa']['item'][i]['CNTCT_TEL'] + "<br>" +
+                            "営業時間: " + data['getAttractionJa']['item'][i]['USAGE_DAY_WEEK_AND_TIME'] + "<br>" + "料金情報: " + data['getAttractionJa']['item'][i]['USAGE_AMOUNT'];
+
+                        var str2 = data['getAttractionJa']['item'][i]['MAIN_IMG_THUMB'];
+
+                        // let search = document.getElementById("search").value; -- 수정되어있는 코드
+
+                        if (filter === 'free' && data['getAttractionJa']['item'][i]['USAGE_AMOUNT'] !== '無料') {
+                            continue; // 무료만 검색 중인데 요금정보가 무료가 아니면 건너뛰기 // "무료"라는 단어만 필터링 되게 설정
+                        }
+
+                        if (filter === 'paid' && data['getAttractionJa']['item'][i]['USAGE_AMOUNT'] === '無料') {
+                            continue; // 유료만 검색 중인데 요금정보가 무료면 건너뛰기
+                        }
+                        if (str.includes(search)) {
+                            results.push({ str: str, str2: str2 }); // 결과를 객체로 저장
+                        }
+                        if (results.length === 123) {  // 검색 결과가 10개일 경우 루프 종료
+                            break;
+                        }
+                    }
+
+                    var resultsDiv = document.getElementById("results");
+                    resultsDiv.innerHTML = ""; // 이전 검색 결과 초기화
+
+                    for (let i = 0; i < results.length; i++) { // 결과 배열의 각 항목을 반복문으로 출력
+                        var resultDiv = document.createElement("div");
+                        resultDiv.id = "box";
+                        resultDiv.innerHTML = "<br>" + results[i].str + "<br>" + "<br>";
+                        var img = document.createElement("img");
+                        img.src = results[i].str2;
+                        resultDiv.appendChild(img);
+                        resultsDiv.appendChild(resultDiv);
+                    }
+
+                });
+        }
+    </script>
+</body>
+
+</html>

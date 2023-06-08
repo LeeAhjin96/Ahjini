@@ -13,6 +13,8 @@ public class MainFrame extends JFrame {
     private JButton startButton; //스타트 버튼
     private JButton recordButton; //기록보기 버튼
     private JButton exitButton; //나가기 버튼
+    private JButton questButton; //도움말 버튼
+    private JButton creditButton; //엔딩크레딧 버튼
     private JLabel backgroundMain;
     private ImageIcon startIcon;  //스타트 아이콘
     private ImageIcon sthoverIcon;  //스타트 호버
@@ -20,6 +22,10 @@ public class MainFrame extends JFrame {
     private ImageIcon rchoverIcon; //기록보기 호버
     private ImageIcon exitIcon; //나가기 아이콘
     private ImageIcon exhoverIcon; //나가기 호버
+    private ImageIcon questIcon; //도움말 아이콘
+    private ImageIcon quhoverIcon; //도움말 호버
+    private ImageIcon creditIcon; //크레딧 아이콘
+    private ImageIcon cdhoverIcon; //크레딧 호버
 
     public MainFrame() {
         initObject();
@@ -32,6 +38,9 @@ public class MainFrame extends JFrame {
         setContentPane(backgroundMain);
 
         //타이틀 이미지
+        JLabel titleLabel = new JLabel(new ImageIcon("image/title.png"));
+        titleLabel.setBounds(380, 40, 400, 200);
+        getContentPane().add(titleLabel);
 
         //스타트 버튼
         startIcon = new ImageIcon("image/start1.png");
@@ -118,6 +127,62 @@ public class MainFrame extends JFrame {
             }
         });
 
+        //도움말
+        questIcon = new ImageIcon("image/question1.png");
+        Image questButtonImage = questIcon.getImage().getScaledInstance(questIcon.getIconWidth() * 2, questIcon.getIconHeight() * 2, Image.SCALE_SMOOTH);
+        questIcon = new ImageIcon(questButtonImage);
+
+        quhoverIcon = new ImageIcon("image/question2.png");
+        Image quhoverImage = quhoverIcon.getImage().getScaledInstance(quhoverIcon.getIconWidth() * 2, quhoverIcon.getIconHeight() * 2, Image.SCALE_SMOOTH);
+        quhoverIcon = new ImageIcon(quhoverImage);
+
+        questButton = new JButton(questIcon);
+        questButton.setBounds(1080, 30, questIcon.getIconWidth(), questIcon.getIconHeight());
+        questButton.setBorderPainted(false);
+        questButton.setContentAreaFilled(false);
+        questButton.setFocusPainted(false);
+        questButton.setOpaque(false);
+
+        questButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                questButton.setIcon(quhoverIcon);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                questButton.setIcon(questIcon);
+            }
+        });
+
+        //엔딩 크레딧
+        creditIcon = new ImageIcon("image/credit1.png");
+        Image creditButtonImage = creditIcon.getImage().getScaledInstance(creditIcon.getIconWidth() * 2, creditIcon.getIconHeight() * 2, Image.SCALE_SMOOTH);
+        creditIcon = new ImageIcon(creditButtonImage);
+
+        cdhoverIcon = new ImageIcon("image/credit2.png");
+        Image cdhoverImage = cdhoverIcon.getImage().getScaledInstance(cdhoverIcon.getIconWidth() * 2, cdhoverIcon.getIconHeight() * 2, Image.SCALE_SMOOTH);
+        cdhoverIcon = new ImageIcon(cdhoverImage);
+
+        creditButton = new JButton(creditIcon);
+        creditButton.setBounds(40, 40, creditIcon.getIconWidth(), creditIcon.getIconHeight());
+        creditButton.setBorderPainted(false);
+        creditButton.setContentAreaFilled(false);
+        creditButton.setFocusPainted(false);
+        creditButton.setOpaque(false);
+
+        creditButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                creditButton.setIcon(cdhoverIcon);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                creditButton.setIcon(creditIcon);
+            }
+        });
+
         // Button click action listener
         startButton.addActionListener(new ActionListener() {
             @Override
@@ -127,9 +192,41 @@ public class MainFrame extends JFrame {
             }
         });
 
+        //나가기 버튼 누르면 프로그램 종료
+        exitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+            //실험중 ---> 팝업띄우는건 성공
+        JFrame frame = new JFrame("Popup Example");
+        JButton button = new JButton("Open Popup");
+        creditButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JDialog dialog = new JDialog(frame, "Popup Dialog", true);
+                dialog.setSize(300, 200);
+                dialog.setLayout(new FlowLayout());
+
+                JLabel label = new JLabel("This is a popup dialog.");
+                dialog.add(label);
+
+                dialog.setLocationRelativeTo(null);
+
+                dialog.setVisible(true);
+            }
+        });
+        frame.add(creditButton);
+        frame.setLayout(new FlowLayout());
+        frame.setVisible(false);
+
+        //-----
         getContentPane().add(startButton);
         getContentPane().add(recordButton);
         getContentPane().add(exitButton);
+        getContentPane().add(questButton);
+        getContentPane().add(creditButton);
     }
 
     private void initSetting() {

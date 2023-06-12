@@ -2,12 +2,16 @@ package shootmain;
 
 import bubble.test.BubbleFrame;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class MainFrame extends JFrame {
     private JButton startButton; //스타트 버튼
@@ -16,6 +20,7 @@ public class MainFrame extends JFrame {
     private JButton questButton; //도움말 버튼
     private JButton creditButton; //엔딩크레딧 버튼
     private JLabel backgroundMain;
+    private JLabel backgroundMain1;
     private ImageIcon startIcon;  //스타트 아이콘
     private ImageIcon sthoverIcon;  //스타트 호버
     private ImageIcon recordIcon; //기록보기 아이콘
@@ -199,21 +204,25 @@ public class MainFrame extends JFrame {
                 System.exit(0);
             }
         });
-            //실험중 ---> 팝업띄우는건 성공
-        JFrame frame = new JFrame("Popup Example");
-        JButton button = new JButton("Open Popup");
+
+        //실험중 ---> 제작자 팝업띄우는건 성공
+        JFrame frame = new JFrame("");
         creditButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JDialog dialog = new JDialog(frame, "Popup Dialog", true);
-                dialog.setSize(300, 200);
-                dialog.setLayout(new FlowLayout());
+                JDialog dialog = new JDialog(MainFrame.this, "Makers", true);
+                dialog.setSize(800, 600);
+                dialog.setLayout(new BorderLayout());
 
-                JLabel label = new JLabel("This is a popup dialog.");
-                dialog.add(label);
-
+                JLabel label = new JLabel();
+                try {
+                    BufferedImage image = ImageIO.read(new File("image/backgroundMain3.jpg"));
+                    label.setIcon(new ImageIcon(image));
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                dialog.add(label, BorderLayout.CENTER);
                 dialog.setLocationRelativeTo(null);
-
                 dialog.setVisible(true);
             }
         });

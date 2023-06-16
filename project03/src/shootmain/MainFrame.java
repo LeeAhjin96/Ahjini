@@ -201,6 +201,15 @@ public class MainFrame extends JFrame {
             }
         });
 
+        // 도움말 버튼 클릭시 연결
+        questButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Question();
+                setVisible(false);
+            }
+        });
+
         //나가기 버튼 누르면 프로그램 종료
         exitButton.addActionListener(new ActionListener() {
             @Override

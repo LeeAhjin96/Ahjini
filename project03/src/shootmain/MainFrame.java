@@ -42,6 +42,12 @@ public class MainFrame extends JFrame {
         titleLabel.setBounds(380, 40, 400, 200);
         getContentPane().add(titleLabel);
 
+        //기록보기 업데이트 이미지
+        JLabel updateLabel = new JLabel(new ImageIcon("image/update.gif"));
+        updateLabel.setBounds(680, 380, 350, 150);
+        getContentPane().add(updateLabel);
+
+
         //스타트 버튼
         startIcon = new ImageIcon("image/start1.png");
         Image startImage = startIcon.getImage().getScaledInstance(startIcon.getIconWidth() * 2, startIcon.getIconHeight() * 2, Image.SCALE_SMOOTH);
